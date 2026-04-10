@@ -1,4 +1,4 @@
-# GitHub Repo name: A8
+# GitHub Repo name: A8 - https://github.com/CS-slop/A8
 # Coded by: Jaren Watson
 import math
 from PyQt6.QtGui import *
