@@ -1,3 +1,4 @@
+# GitHub Repo name: A8
 import math
 
 from PyQt6.QtGui import *
@@ -24,8 +25,9 @@ class SpritePreview(QMainWindow):
         self.num_frames = 21
         self.frames = load_sprite('spriteImages',self.num_frames)
 
-        # Add any other instance variables needed to track information as the program
-        # runs here
+        self.current_frame = 0
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.next_frame)
 
         # Make the GUI in the setupUI method
         self.setupUI()
@@ -35,12 +37,25 @@ class SpritePreview(QMainWindow):
         # An application needs a central widget - often a QFrame
         frame = QFrame()
 
-        # Add a lot of code here to make layouts, more QFrame or QWidgets, and
-        # the other components of the program.
-        # Create needed connections between the UI components and slot methods
-        # you define in this class.
+        layout = QHBoxLayout()
+
+        top_layout = QHBoxLayout()
+
+        self.image_label = QLabel()
+        self.image_label.setPixmap(self.frames[0])
+
+        top_layout.addWidget(self.image_label)
+
+        layout.addLayout(top_layout)
+
+        frame.setLayout(layout)
 
         self.setCentralWidget(frame)
+
+    def next_frame(self):
+        #set frame to next frame - uses modulus for when self.current_frame exceeds salf.num_frames
+        self.current_frame = (self.current_frame + 1) % self.num_frames
+        self.image_label.setPixmap(self.frames[self.current_frame])
 
 
     # You will need methods in the class to act as slots to connect to signals
