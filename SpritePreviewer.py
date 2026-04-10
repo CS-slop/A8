@@ -37,7 +37,7 @@ class SpritePreview(QMainWindow):
         # An application needs a central widget - often a QFrame
         frame = QFrame()
 
-        layout = QHBoxLayout()
+        layout = QVBoxLayout()
         top_layout = QHBoxLayout()
 
         # Image
@@ -69,12 +69,7 @@ class SpritePreview(QMainWindow):
         self.button = QPushButton("Start")
         self.button.clicked.connect(self.toggle_animation)
 
-        layout.addLayout(top_layout)
-        layout.addLayout(middle_layout)
-        frame.setLayout(layout)
-
         self.slider.valueChanged.connect(self.update_slider_display)
-        layout.addWidget(self.button)
 
         menu_bar = self.menuBar()
         file_menu = menu_bar.addMenu("File")
@@ -87,6 +82,11 @@ class SpritePreview(QMainWindow):
 
         pause_action.triggered.connect(self.pause_animation)
         exit_action.triggered.connect(self.close)
+
+        layout.addLayout(top_layout)
+        layout.addLayout(middle_layout)
+        layout.addWidget(self.button)
+        frame.setLayout(layout)
 
         self.setCentralWidget(frame)
 
