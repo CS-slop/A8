@@ -66,11 +66,15 @@ class SpritePreview(QMainWindow):
         middle_layout.addWidget(self.fps_label)
         middle_layout.addWidget(self.fps_value)
 
+        self.button = QPushButton("Start")
+        self.button.clicked.connect(self.toggle_animation)
+
         layout.addLayout(top_layout)
         layout.addLayout(middle_layout)
         frame.setLayout(layout)
 
         self.slider.valueChanged.connect(self.update_slider_display)
+        layout.addWidget(self.button)
 
         self.setCentralWidget(frame)
 
@@ -82,9 +86,16 @@ class SpritePreview(QMainWindow):
     def update_slider_display(self):
         self.fps_value.setText(str(self.slider.value()))
 
+    def toggle_animation(self):
+        if self.button.text() == "Start":
+            fps = self.slider.value()
+            interval = int(1000 / fps)
 
-    # You will need methods in the class to act as slots to connect to signals
-
+            self.timer.start(interval)
+            self.button.setText("Stop")
+        else:
+            self.timer.stop()
+            self.button.setText("Start")
 
 def main():
     app = QApplication([])
