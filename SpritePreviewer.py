@@ -38,17 +38,39 @@ class SpritePreview(QMainWindow):
         frame = QFrame()
 
         layout = QHBoxLayout()
-
         top_layout = QHBoxLayout()
 
+        # Image
         self.image_label = QLabel()
         self.image_label.setPixmap(self.frames[0])
-
         top_layout.addWidget(self.image_label)
 
-        layout.addLayout(top_layout)
+        # Slider
+        self.slider = QSlider(Qt.Orientation.Vertical)
+        self.slider.setMinimum(1)
+        self.slider.setMaximum(100)
+        self.slider.setValue(30)
 
+        # Tick marks
+        self.slider.setTickPosition(QSlider.TickPosition.TicksBelow)
+        self.slider.setTickInterval(20)
+
+        top_layout.addWidget(self.slider)
+
+        # Spot for text and displaying slider value
+        middle_layout = QHBoxLayout()
+
+        self.fps_label = QLabel("Frames per second:")
+        self.fps_value = QLabel(str(self.slider.value()))
+
+        middle_layout.addWidget(self.fps_label)
+        middle_layout.addWidget(self.fps_value)
+
+        layout.addLayout(top_layout)
+        layout.addLayout(middle_layout)
         frame.setLayout(layout)
+
+        self.slider.valueChanged.connect(self.update_slider_display)
 
         self.setCentralWidget(frame)
 
@@ -56,6 +78,9 @@ class SpritePreview(QMainWindow):
         #set frame to next frame - uses modulus for when self.current_frame exceeds salf.num_frames
         self.current_frame = (self.current_frame + 1) % self.num_frames
         self.image_label.setPixmap(self.frames[self.current_frame])
+
+    def update_slider_display(self):
+        self.fps_value.setText(str(self.slider.value()))
 
 
     # You will need methods in the class to act as slots to connect to signals
