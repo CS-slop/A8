@@ -1,6 +1,6 @@
 # GitHub Repo name: A8
+# Coded by: Jaren Watson
 import math
-
 from PyQt6.QtGui import *
 from PyQt6.QtWidgets import *
 from PyQt6.QtCore import *
@@ -54,6 +54,7 @@ class SpritePreview(QMainWindow):
         # Tick marks
         self.slider.setTickPosition(QSlider.TickPosition.TicksBelow)
         self.slider.setTickInterval(20)
+        self.slider.valueChanged.connect(self.update_slider_display)
 
         top_layout.addWidget(self.slider)
 
@@ -66,11 +67,11 @@ class SpritePreview(QMainWindow):
         middle_layout.addWidget(self.fps_label)
         middle_layout.addWidget(self.fps_value)
 
+        # Start/Stop button
         self.button = QPushButton("Start")
         self.button.clicked.connect(self.toggle_animation)
 
-        self.slider.valueChanged.connect(self.update_slider_display)
-
+        # menu for pause/exit
         menu_bar = self.menuBar()
         file_menu = menu_bar.addMenu("File")
 
@@ -83,6 +84,7 @@ class SpritePreview(QMainWindow):
         pause_action.triggered.connect(self.pause_animation)
         exit_action.triggered.connect(self.close)
 
+        # Add all layouts
         layout.addLayout(top_layout)
         layout.addLayout(middle_layout)
         layout.addWidget(self.button)
@@ -96,7 +98,12 @@ class SpritePreview(QMainWindow):
         self.image_label.setPixmap(self.frames[self.current_frame])
 
     def update_slider_display(self):
-        self.fps_value.setText(str(self.slider.value()))
+        fps = self.slider.value()
+        self.fps_value.setText(str(fps))
+
+        if self.timer.isActive():
+            interval = int(1000 / fps)
+            self.timer.setInterval(interval)
 
     def toggle_animation(self):
         if self.button.text() == "Start":
