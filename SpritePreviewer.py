@@ -76,6 +76,18 @@ class SpritePreview(QMainWindow):
         self.slider.valueChanged.connect(self.update_slider_display)
         layout.addWidget(self.button)
 
+        menu_bar = self.menuBar()
+        file_menu = menu_bar.addMenu("File")
+
+        pause_action = QAction("Pause", self)
+        exit_action = QAction("Exit", self)
+
+        file_menu.addAction(pause_action)
+        file_menu.addAction(exit_action)
+
+        pause_action.triggered.connect(self.pause_animation)
+        exit_action.triggered.connect(self.close)
+
         self.setCentralWidget(frame)
 
     def next_frame(self):
@@ -96,6 +108,10 @@ class SpritePreview(QMainWindow):
         else:
             self.timer.stop()
             self.button.setText("Start")
+
+    def pause_animation(self):
+        self.timer.stop()
+        self.button.setText("Start")
 
 def main():
     app = QApplication([])
